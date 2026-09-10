@@ -703,93 +703,7 @@ CREATE POLICY "Public manage availability" ON public.availability FOR ALL USING 
     }
   };
 
-  // ── IF NOT AUTHENTICATED: SHOW SECURE LOGIN PORTAL ──
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-[85vh] flex items-center justify-center pt-28 pb-20 px-4 sm:px-6">
-        <div className="max-w-md w-full rounded-3xl bg-[#0D2137] text-white p-8 sm:p-10 shadow-2xl border border-[#E8704A]/30 relative overflow-hidden space-y-6 animate-fadeIn">
-          {/* Background Glow */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#E8704A]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#1A5C52]/20 rounded-full blur-3xl pointer-events-none" />
-
-          {/* Logo & Header */}
-          <div className="text-center space-y-3 relative z-10">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#E8704A] to-[#1A5C52] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#E8704A]/25">
-              <Lock className="w-8 h-8 stroke-[2.2]" />
-            </div>
-            <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-[#E8704A]">
-                Authorized Personnel Only
-              </span>
-              <h2 className="font-display font-black text-2xl sm:text-3xl text-white mt-1">
-                Island Dispatch Portal
-              </h2>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Enter the manager security password or PIN to access live bookings, CMS pricing, and passenger manifests.
-            </p>
-          </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleLogin} className="space-y-4 relative z-10">
-            {loginError && (
-              <div className="p-3.5 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-xs text-rose-200 flex items-center gap-2 animate-shake">
-                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>{loginError}</span>
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                Security Password / PIN
-              </label>
-              <div className="relative">
-                <input
-                  type={showLoginPassword ? 'text' : 'password'}
-                  required
-                  disabled={isLockedOut}
-                  value={enteredPassword}
-                  onChange={(e) => setEnteredPassword(e.target.value)}
-                  placeholder="Enter Password or 4-Digit PIN..."
-                  className="w-full pl-4 pr-12 py-3.5 rounded-2xl bg-[#081629] border border-white/20 text-white placeholder-slate-400 text-sm font-mono focus:outline-none focus:border-[#E8704A] transition-colors disabled:opacity-50"
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
-                  tabIndex={-1}
-                >
-                  {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLockedOut || !enteredPassword}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#C8820A] to-[#E8704A] hover:brightness-110 text-[#0D2137] font-display font-extrabold text-sm uppercase tracking-wider shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              <Unlock className="w-4 h-4 stroke-[2.5]" />
-              <span>{isLockedOut ? `Locked (${lockoutTimer}s)` : 'Authenticate & Unlock'}</span>
-            </button>
-          </form>
-
-          {/* Quick Notice */}
-          <div className="pt-2 border-t border-white/10 text-center relative z-10 space-y-1">
-            <p className="text-[11px] text-slate-400">
-              🔑 <strong>Default Master Password:</strong> <code className="text-[#E8704A] font-mono bg-white/10 px-1.5 py-0.5 rounded">phangan2026</code> or PIN <code className="text-[#E8704A] font-mono bg-white/10 px-1.5 py-0.5 rounded">8899</code>
-            </p>
-            <p className="text-[10px] text-slate-400">
-              Password can be customized at anytime in the Security Manager tab.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── MAIN ADMIN DASHBOARD (AUTHENTICATED) ──
+  // ── MAIN ADMIN DASHBOARD (DIRECT ACCESS) ──
   return (
     <div className="pt-28 sm:pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-fadeIn">
       {/* Admin Title Bar */}
@@ -896,28 +810,7 @@ CREATE POLICY "Public manage availability" ON public.availability FOR ALL USING 
               <Anchor className="w-3.5 h-3.5" />
               <span>Fleet</span>
             </button>
-
-            <button
-              onClick={() => setActiveTab('security')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                activeTab === 'security'
-                  ? 'bg-[#0D2137] text-white shadow-sm'
-                  : 'text-[#64748B] hover:text-[#0D2137]'
-              }`}
-            >
-              <Key className="w-3.5 h-3.5 text-[#C8820A]" />
-              <span>Security</span>
-            </button>
           </div>
-
-          <button
-            onClick={handleLogout}
-            title="Log out of Admin Session"
-            className="px-3.5 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
         </div>
       </div>
 
@@ -2079,93 +1972,6 @@ CREATE POLICY "Public manage availability" ON public.availability FOR ALL USING 
                 <div className="text-[11px] text-[#64748B]">Ready for dispatch at Thong Sala Base</div>
               </div>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── TAB 7: SECURITY & ADMIN PASSWORD MANAGER ── */}
-      {activeTab === 'security' && (
-        <div className="space-y-6 animate-fadeIn">
-          <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-card space-y-6 max-w-2xl">
-            <div className="space-y-1 pb-4 border-b border-slate-100">
-              <h3 className="font-display font-extrabold text-xl text-[#0D2137] flex items-center gap-2">
-                <Key className="w-5 h-5 text-[#C8820A]" />
-                <span>Admin Access Password & Security Settings</span>
-              </h3>
-              <p className="text-xs text-[#5C6E7A]">
-                Change the master password or PIN used to log into this operations portal.
-              </p>
-            </div>
-
-            {passwordChangeSuccess && (
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs text-emerald-800 font-bold flex items-center gap-2 animate-fadeIn">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Admin master password updated successfully!</span>
-              </div>
-            )}
-
-            {passwordChangeError && (
-              <div className="p-4 rounded-2xl bg-rose-50 border border-rose-300 text-xs text-rose-800 font-bold flex items-center gap-2 animate-shake">
-                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                <span>{passwordChangeError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleChangePassword} className="space-y-4 text-xs">
-              <div className="space-y-1.5">
-                <label className="font-bold text-[#0D2137] block">Current Password / PIN:</label>
-                <input
-                  type="password"
-                  required
-                  value={currentPasswordInput}
-                  onChange={(e) => setCurrentPasswordInput(e.target.value)}
-                  placeholder="Enter current password or PIN..."
-                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-mono text-[#0D2137] focus:outline-none focus:border-[#E8704A]"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-bold text-[#0D2137] block">New Password / PIN (Min 4 chars):</label>
-                <input
-                  type="password"
-                  required
-                  value={newPasswordInput}
-                  onChange={(e) => setNewPasswordInput(e.target.value)}
-                  placeholder="Enter new master password or PIN..."
-                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-mono text-[#0D2137] focus:outline-none focus:border-[#E8704A]"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-bold text-[#0D2137] block">Confirm New Password / PIN:</label>
-                <input
-                  type="password"
-                  required
-                  value={confirmPasswordInput}
-                  onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                  placeholder="Repeat new password..."
-                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 font-mono text-[#0D2137] focus:outline-none focus:border-[#E8704A]"
-                />
-              </div>
-
-              <div className="pt-2 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
-                >
-                  Logout Now
-                </button>
-
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0D2137] hover:bg-[#1A5C52] text-white font-display font-extrabold text-xs uppercase tracking-wider shadow-md transition-all"
-                >
-                  <Key className="w-4 h-4 text-[#E8704A]" />
-                  <span>Update Password</span>
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
