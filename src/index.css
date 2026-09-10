@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════
+   KOH PHANGAN ISLAND ADVENTURE — LUXURY TROPICAL PALETTE
+   Inspired by: Four Seasons Bali, Aman Resorts, Condé Nast Traveller
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Deep indigo-navy — editorial, grounded, premium */
+  --color-primary:    #0D2137;
+
+  /* Rich ocean jade — Andaman Sea depth */
+  --color-secondary:  #1A5C52;
+
+  /* Coral sunrise — warm, energetic, unmistakably tropical */
+  --color-accent:     #E8704A;
+
+  /* Soft coral for hover/dark variant */
+  --color-coral:      #D45F3C;
+
+  /* Aged ivory — warm parchment, not clinical white */
+  --color-background: #FAF7F2;
+
+  /* Driftwood sand — tactile, earthy */
+  --color-sand:       #EDE0CB;
+
+  /* Rich amber-honey — hand-painted feel, never flat */
+  --color-gold:       #C8820A;
+
+  /* Body copy */
+  --color-text:       #1A1A2E;
+
+  /* Muted details */
+  --color-muted:      #5C6E7A;
+
+  /* Mist jade tint — gentle section backgrounds */
+  --color-jade:       #D5E8E4;
+}
+
+
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Outfit', 'Sarabun', 'Plus Jakarta Sans', system-ui, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #FAF7F2;
+    color: #1A1A2E;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #E8704A;
+    color: #FAF7F2;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #0D2137;
+    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    font-weight: 800;
+  }
+
+  p, span, li {
+    color: #1A1A2E;
+  }
+}
+
+@layer utilities {
+  /* ── Colour tokens as utilities ───────────────────────────────── */
+  .bg-brand-primary   { background-color: #0D2137; }
+  .bg-brand-secondary { background-color: #1A5C52; }
+  .bg-brand-accent    { background-color: #E8704A; }
+  .bg-brand-coral     { background-color: #D45F3C; }
+  .bg-brand-sand      { background-color: #EDE0CB; }
+  .bg-brand-jade      { background-color: #D5E8E4; }
+
+  .text-brand-primary   { color: #0D2137; }
+  .text-brand-secondary { color: #1A5C52; }
+  .text-brand-accent    { color: #E8704A; }
+  .text-brand-coral     { color: #D45F3C; }
+  .text-brand-gold      { color: #C8820A; }
+  .text-brand-muted     { color: #5C6E7A; }
+
+  /* ── Signature badge: editorial pill used site-wide ───────────── */
+  .marine-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.275rem 0.9rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    line-height: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background-color: rgba(26, 92, 82, 0.10);
+    color: #1A5C52;
+    border: 1px solid rgba(26, 92, 82, 0.25);
+  }
+
+  /* ── Tropical gradient variants ──────────────────────────────── */
+  .gradient-hero {
+    background: linear-gradient(135deg, #0D2137 0%, #1A3347 40%, #1A5C52 100%);
+  }
+
+  .gradient-coral {
+    background: linear-gradient(135deg, #C8820A 0%, #E8704A 100%);
+  }
+
+  .gradient-ocean {
+    background: linear-gradient(135deg, #0D2137 0%, #1A5C52 100%);
+  }
+
+  .gradient-warm {
+    background: linear-gradient(135deg, #E8704A 0%, #C8820A 100%);
+  }
+
+  /* ── Card styles ─────────────────────────────────────────────── */
+  .card-ivory {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(13, 33, 55, 0.08);
+    box-shadow: 0 4px 22px -2px rgba(13, 33, 55, 0.07), 0 2px 6px -1px rgba(13, 33, 55, 0.04);
+    border-radius: 1.5rem;
+  }
+
+  .card-sand {
+    background-color: #F7F1E8;
+    border: 1px solid rgba(200, 130, 10, 0.18);
+    border-radius: 1.5rem;
+  }
+
+  .card-ocean {
+    background-color: #0D2137;
+    border: 1px solid rgba(26, 92, 82, 0.35);
+    border-radius: 1.5rem;
+  }
+
+  /* ── Animate utilities ────────────────────────────────────────── */
+  .animate-fadeIn {
+    animation: fadeIn 0.4s ease-out both;
+  }
+
+  /* ── Text treatments ────────────────────────────────────────── */
+  .text-display {
+    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #0D2137;
+  }
+
+  .text-caption {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5C6E7A;
+  }
+}
+
+/* ─── Animation Keyframes ─────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+
+/* ─── Custom Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 8px; }
+::-webkit-scrollbar-track  { background: #FAF7F2; }
+::-webkit-scrollbar-thumb  { background: #1A5C52; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #E8704A; }
