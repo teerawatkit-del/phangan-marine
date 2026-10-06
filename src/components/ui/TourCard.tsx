@@ -92,17 +92,17 @@ export const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         <div className="pt-3 border-t border-stone-100 grid grid-cols-2 gap-2.5">
           <Link
             to={`/tours/${tour.slug}`}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-[#0D2137] font-bold text-xs transition-all"
+            className="group/btn flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#FAF7F2] border border-[#1A5C52]/20 hover:border-[#1A5C52] hover:bg-white transition-all duration-300"
           >
-            <span>{t.services.viewTour}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span className="text-[#1A5C52] font-bold text-xs">{t.services.viewTour}</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#1A5C52] group-hover/btn:translate-x-1 transition-transform" />
           </Link>
 
           <Link
             to={`/book?tour=${tour.slug}`}
-            className="flex items-center justify-center gap-1 py-2.5 px-3 rounded-xl bg-[#0D2137] hover:bg-[#1A5C52] text-white text-xs font-extrabold shadow-sm transition-all tracking-wide"
+            className="group/book flex items-center justify-center gap-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#E8704A] to-[#D45F3C] hover:from-[#D45F3C] hover:to-[#C8820A] shadow-md hover:shadow-lg shadow-[#E8704A]/30 transition-all duration-300 hover:-translate-y-0.5"
           >
-            <span>{t.services.bookNow}</span>
+            <span className="text-white text-xs font-extrabold tracking-wide drop-shadow-sm">{t.services.bookNow}</span>
           </Link>
         </div>
       </div>

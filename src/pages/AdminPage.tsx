@@ -51,6 +51,7 @@ import {
 import { useBookings } from '../context/BookingContext';
 import { useTours } from '../context/TourContext';
 import { useBusiness } from '../context/BusinessContext';
+import { useGallery } from '../context/GalleryContext';
 import { 
   generateEmailHtml, 
   generateEmailText, 
@@ -61,6 +62,7 @@ import {
   saveEmailSettings, 
   EmailSettings 
 } from '../lib/emailService';
+import { GalleryCMS } from '../components/admin/GalleryCMS';
 import {
   getSupabaseConfig,
   saveSupabaseConfig,
@@ -80,6 +82,7 @@ export const AdminPage: React.FC = () => {
   const { bookings, updateBookingStatus, metrics } = useBookings();
   const { tours, updateTour, resetToDefault } = useTours();
   const { businessInfo, updateBusinessInfo, resetBusinessInfo } = useBusiness();
+  const { galleryItems, addGalleryItem, updateGalleryItem, deleteGalleryItem } = useGallery();
 
   // ── 1. AUTHENTICATION & SECURITY STATE ──
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -94,7 +97,7 @@ export const AdminPage: React.FC = () => {
 
   // ── 2. ADMIN TABS ──
   const [activeTab, setActiveTab] = useState<
-    'bookings' | 'tours' | 'manifest' | 'business' | 'database' | 'notifications' | 'availability' | 'security'
+    'bookings' | 'tours' | 'manifest' | 'business' | 'database' | 'notifications' | 'availability' | 'security' | 'gallery'
   >('bookings');
   
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -703,6 +706,68 @@ CREATE POLICY "Public manage availability" ON public.availability FOR ALL USING 
     }
   };
 
+  // ── ADMIN LOGIN SCREEN ──
+  if (!isAuthenticated) {
+    return (
+      <div className="pt-32 pb-24 max-w-md mx-auto px-4 space-y-8 animate-fadeIn min-h-[80vh] flex flex-col justify-center">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#1A5C52]/10 mb-2">
+            <Lock className="w-6 h-6 text-[#1A5C52]" />
+          </div>
+          <h1 className="font-display font-black text-3xl text-[#0D2137]">Admin Access</h1>
+          <p className="text-slate-500 text-sm">Please enter the master password to continue</p>
+        </div>
+
+        <form onSubmit={handleLogin} className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-card space-y-6">
+          {loginError && (
+            <div className="p-3 rounded-xl bg-rose-50 text-rose-700 text-sm font-semibold flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-[#0D2137] uppercase tracking-wider">Master Password</label>
+            <div className="relative">
+              <Key className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type={showLoginPassword ? 'text' : 'password'}
+                value={enteredPassword}
+                onChange={(e) => setEnteredPassword(e.target.value)}
+                disabled={isLockedOut}
+                className="w-full pl-10 pr-10 py-3 bg-stone-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1A5C52] disabled:opacity-50 outline-none"
+                placeholder="Enter password..."
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowLoginPassword(!showLoginPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0D2137]"
+              >
+                {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLockedOut}
+            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#0D2137] hover:bg-[#1A5C52] text-white rounded-xl font-bold transition-all shadow-md disabled:opacity-50"
+          >
+            {isLockedOut ? (
+              <span>Locked ({lockoutTimer}s)</span>
+            ) : (
+              <>
+                <Unlock className="w-4 h-4" />
+                <span>Secure Login</span>
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   // ── MAIN ADMIN DASHBOARD (DIRECT ACCESS) ──
   return (
     <div className="pt-28 sm:pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-fadeIn">
@@ -749,6 +814,18 @@ CREATE POLICY "Public manage availability" ON public.availability FOR ALL USING 
             >
               <Edit3 className="w-3.5 h-3.5 text-[#E8704A]" />
               <span>Tours CMS ({tours.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('gallery')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                activeTab === 'gallery'
+                  ? 'bg-[#0D2137] text-white shadow-sm'
+                  : 'text-[#64748B] hover:text-[#0D2137]'
+              }`}
+            >
+              <ImageIcon className="w-3.5 h-3.5 text-[#C8820A]" />
+              <span>Gallery CMS ({galleryItems.length})</span>
             </button>
 
             <button
@@ -1072,6 +1149,11 @@ CREATE POLICY "Public manage availability" ON public.availability FOR ALL USING 
             ))}
           </div>
         </div>
+      )}
+
+      {/* ── TAB: GALLERY CMS ── */}
+      {activeTab === 'gallery' && (
+        <GalleryCMS />
       )}
 
       {/* ── TAB 3: BUSINESS INFO & CONTACTS (CENTRALIZED CMS) ── */}

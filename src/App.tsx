@@ -4,6 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import { BookingProvider } from './context/BookingContext';
 import { TourProvider } from './context/TourContext';
 import { BusinessProvider } from './context/BusinessContext';
+import { GalleryProvider } from './context/GalleryContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { StickyMobileBar } from './components/layout/StickyMobileBar';
@@ -34,31 +35,33 @@ const App: React.FC = () => {
     <LanguageProvider>
       <BusinessProvider>
         <TourProvider>
-          <BookingProvider>
-            <Router>
-              <ScrollToTop />
-              <div className="flex flex-col min-h-screen bg-brand-bg text-brand-text selection:bg-brand-accent selection:text-brand-primary font-sans antialiased">
-                <Navbar />
-                <main className="flex-grow">
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/tours" element={<ToursPage />} />
-                    <Route path="/tours/:slug" element={<TourDetailPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/gallery" element={<GalleryPage />} />
-                    <Route path="/faq" element={<FaqPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/book" element={<BookingPage />} />
-                    <Route path="/admin" element={<AdminPage />} />
-                    <Route path="*" element={<HomePage />} />
-                  </Routes>
-                </main>
-                <Footer />
-                <StickyMobileBar />
-                <FloatingContactWidget />
-              </div>
-            </Router>
-          </BookingProvider>
+          <GalleryProvider>
+            <BookingProvider>
+              <Router>
+                <ScrollToTop />
+                <div className="flex flex-col min-h-screen bg-brand-bg text-brand-text selection:bg-brand-accent selection:text-brand-primary font-sans antialiased">
+                  <Navbar />
+                  <main className="flex-grow">
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/tours" element={<ToursPage />} />
+                      <Route path="/tours/:slug" element={<TourDetailPage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/gallery" element={<GalleryPage />} />
+                      <Route path="/faq" element={<FaqPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
+                      <Route path="/book" element={<BookingPage />} />
+                      <Route path="/admin" element={<AdminPage />} />
+                      <Route path="*" element={<HomePage />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                  <StickyMobileBar />
+                  <FloatingContactWidget />
+                </div>
+              </Router>
+            </BookingProvider>
+          </GalleryProvider>
         </TourProvider>
       </BusinessProvider>
     </LanguageProvider>

@@ -20,8 +20,8 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTours } from '../context/TourContext';
+import { useGallery } from '../context/GalleryContext';
 import { reviewsData } from '../data/reviewsData';
-import { galleryData } from '../data/galleryData';
 import { faqData } from '../data/faqData';
 import { TourCard } from '../components/ui/TourCard';
 import { ServiceCard } from '../components/ui/ServiceCard';
@@ -33,14 +33,15 @@ import type { GalleryItem } from '../types';
 export const HomePage: React.FC = () => {
   const { language, t } = useLanguage();
   const { tours } = useTours();
+  const { galleryItems } = useGallery();
   const [selectedGalleryCategory, setSelectedGalleryCategory] = useState<string>('All');
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [selectedTourFilter, setSelectedTourFilter] = useState<string>('all');
 
   const filteredGallery = selectedGalleryCategory === 'All'
-    ? galleryData.slice(0, 6)
-    : galleryData.filter((item) => item.category === selectedGalleryCategory);
+    ? galleryItems.slice(0, 6)
+    : galleryItems.filter((item) => item.category === selectedGalleryCategory);
 
   const activeTours = tours.filter(t => t.active);
 
@@ -705,7 +706,7 @@ export const HomePage: React.FC = () => {
       {/* Lightbox Modal */}
       <LightboxModal
         item={lightboxItem}
-        items={galleryData}
+        items={galleryItems}
         onClose={() => setLightboxItem(null)}
         onSelect={(item) => setLightboxItem(item)}
       />

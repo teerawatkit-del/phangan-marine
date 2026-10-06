@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import { Eye, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { galleryData } from '../data/galleryData';
+import { useGallery } from '../context/GalleryContext';
 import { LightboxModal } from '../components/ui/LightboxModal';
 import type { GalleryItem } from '../types';
 
 export const GalleryPage: React.FC = () => {
   const { t } = useLanguage();
+  const { galleryItems } = useGallery();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
 
   const categories = ['All', 'Jet Ski', 'Speedboat', 'Islands', 'Fishing', 'Snorkeling', 'Sunset'];
 
   const filteredItems = selectedCategory === 'All'
-    ? galleryData
-    : galleryData.filter((item) => item.category === selectedCategory);
+    ? galleryItems
+    : galleryItems.filter((item) => item.category === selectedCategory);
 
   return (
     <div className="pt-28 sm:pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
